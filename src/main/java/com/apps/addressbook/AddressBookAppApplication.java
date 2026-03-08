@@ -10,58 +10,54 @@ import com.apps.addressbook.model.AddressBook;
 import com.apps.addressbook.model.Contact;
 
 @SpringBootApplication
-public class AddressBookAppApplication implements CommandLineRunner {
-
-	private AddressBook addressBook = new AddressBook();
-
+public class AddressBookAppApplication {
 	public static void main(String[] args) {
+
 		SpringApplication.run(AddressBookAppApplication.class, args);
-		System.out.println("Welcome to Address Book Application!!!");
-	}
 
-	@Override
-	public void run(String... args) {
-
+		AddressBook addressBook = new AddressBook();
 		Scanner scanner = new Scanner(System.in);
 
-		System.out.println("Enter First Name:");
-		String firstName = scanner.nextLine();
+		String choice;
 
-		System.out.println("Enter Last Name:");
-		String lastName = scanner.nextLine();
+		do {
 
-		System.out.println("Enter Address:");
-		String address = scanner.nextLine();
+			System.out.println("\nEnter Contact Details");
 
-		System.out.println("Enter City:");
-		String city = scanner.nextLine();
+			System.out.println("First Name:");
+			String firstName = scanner.nextLine();
 
-		System.out.println("Enter State:");
-		String state = scanner.nextLine();
+			System.out.println("Last Name:");
+			String lastName = scanner.nextLine();
 
-		System.out.println("Enter Zip:");
-		String zip = scanner.nextLine();
+			System.out.println("Address:");
+			String address = scanner.nextLine();
 
-		System.out.println("Enter Phone:");
-		String phone = scanner.nextLine();
+			System.out.println("City:");
+			String city = scanner.nextLine();
 
-		System.out.println("Enter Email:");
-		String email = scanner.nextLine();
+			System.out.println("State:");
+			String state = scanner.nextLine();
 
-		Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone, email);
-		addressBook.addContact(contact);
+			System.out.println("Zip:");
+			String zip = scanner.nextLine();
+
+			System.out.println("Phone:");
+			String phone = scanner.nextLine();
+
+			System.out.println("Email:");
+			String email = scanner.nextLine();
+
+			Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone, email);
+			addressBook.addContact(contact);
+			System.out.println("\nDo you want to add another contact? (yes/no)");
+			choice = scanner.nextLine();
+
+		} while (choice.equalsIgnoreCase("yes"));
+
+		System.out.println("\nAll Contacts:");
 		addressBook.displayContacts();
 
-		System.out.println("\nEnter First Name of contact to edit:");
-		String editName = scanner.nextLine();
-		addressBook.editContact(editName);
-		System.out.println("\nUpdated Contacts:");
-		addressBook.displayContacts();
-
-		System.out.println("\nEnter first name of contact to delete:");
-		String nameToDelete = scanner.nextLine();
-		addressBook.deleteContact(nameToDelete);
-		System.out.println("\nUpdated Contact List:");
-		addressBook.displayContacts();
+		scanner.close();
 	}
 }
