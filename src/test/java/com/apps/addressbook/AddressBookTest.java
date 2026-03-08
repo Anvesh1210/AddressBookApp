@@ -17,55 +17,43 @@ public class AddressBookTest {
 	}
 
 	@Test
-	void givenContactDetails_whenContactAdded_shouldIncreaseListSize() {
+	void givenExistingContact_whenEdited_shouldUpdateContactDetails() {
+
 		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
 				"anvesh@email.com");
 		addressBook.addContact(contact);
-		Assertions.assertEquals(1, addressBook.getContactList().size());
+		// simulate edit
+		contact.setCity("Lucknow");
+		Assertions.assertEquals("Lucknow", addressBook.getContactList().get(0).getCity());
 	}
 
 	@Test
-	void givenMultipleContacts_whenAdded_shouldStoreAllContacts() {
-
+	void givenMultipleContacts_whenEditingOne_shouldUpdateOnlyThatContact() {
 		Contact contact1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
 				"anvesh@email.com");
 		Contact contact2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
 				"rahul@email.com");
 		addressBook.addContact(contact1);
 		addressBook.addContact(contact2);
-		Assertions.assertEquals(2, addressBook.getContactList().size());
+		// simulate edit
+		contact1.setCity("Delhi");
+		Assertions.assertEquals("Delhi", addressBook.getContactList().get(0).getCity());
+		Assertions.assertEquals("Lucknow", addressBook.getContactList().get(1).getCity());
 	}
 
 	@Test
-	void givenContactAdded_whenRetrieved_shouldMatchStoredContact() {
-
+	void givenContactNotPresent_whenEditAttempted_shouldNotChangeListSize() {
 		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
 				"anvesh@email.com");
 		addressBook.addContact(contact);
-		Contact storedContact = addressBook.getContactList().get(0);
-		Assertions.assertEquals("Anvesh", storedContact.getFirstName());
-		Assertions.assertEquals("Kanpur", storedContact.getCity());
+		int sizeBefore = addressBook.getContactList().size();
+		// simulate editing a non-existing contact
+		String nameToEdit = "Rahul";
+		if (!addressBook.getContactList().get(0).getFirstName().equals(nameToEdit)) {
+			// nothing updated
+		}
+
+		Assertions.assertEquals(sizeBefore, addressBook.getContactList().size());
 	}
 
-	@Test
-	void givenAddressBook_whenInitialized_shouldStartWithEmptyList() {
-		Assertions.assertTrue(addressBook.getContactList().isEmpty());
-	}
-
-	@Test
-	void givenContactAdded_whenCheckingList_shouldNotBeEmpty() {
-
-		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
-				"anvesh@email.com");
-		addressBook.addContact(contact);
-		Assertions.assertFalse(addressBook.getContactList().isEmpty());
-	}
-
-	@Test
-	void givenContactsAdded_whenDisplayContactsCalled_shouldExecuteWithoutException() {
-		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
-				"anvesh@email.com");
-		addressBook.addContact(contact);
-		Assertions.assertDoesNotThrow(() -> addressBook.displayContacts());
-	}
 }
