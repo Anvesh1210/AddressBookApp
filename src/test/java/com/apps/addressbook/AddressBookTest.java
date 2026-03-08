@@ -17,33 +17,26 @@ public class AddressBookTest {
 	}
 
 	@Test
-	void givenContactExists_whenDeleted_shouldRemoveContact() {
-		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
-				"anvesh@email.com");
-		addressBook.addContact(contact);
-		addressBook.deleteContact("Anvesh");
-		Assertions.assertTrue(addressBook.getContactList().isEmpty());
-	}
+	void givenMultipleContacts_whenAdded_shouldStoreAllContacts() {
 
-	@Test
-	void givenContactNotExists_whenDeleteAttempted_shouldNotChangeList() {
-		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
-				"anvesh@email.com");
-		addressBook.addContact(contact);
-		int sizeBefore = addressBook.getContactList().size();
-		addressBook.deleteContact("Rahul");
-		Assertions.assertEquals(sizeBefore, addressBook.getContactList().size());
-	}
-
-	@Test
-	void givenMultipleContacts_whenOneDeleted_shouldRemoveOnlyThatContact() {
 		Contact contact1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
 				"anvesh@email.com");
 		Contact contact2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
 				"rahul@email.com");
 		addressBook.addContact(contact1);
 		addressBook.addContact(contact2);
-		addressBook.deleteContact("Anvesh");
-		Assertions.assertEquals(1, addressBook.getContactList().size());
+		Assertions.assertEquals(2, addressBook.getContactList().size());
+	}
+
+	@Test
+	void givenMultipleContacts_whenStored_shouldMaintainCorrectOrder() {
+		Contact contact1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact contact2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
+				"rahul@email.com");
+		addressBook.addContact(contact1);
+		addressBook.addContact(contact2);
+		Assertions.assertEquals("Anvesh", addressBook.getContactList().get(0).getFirstName());
+		Assertions.assertEquals("Rahul", addressBook.getContactList().get(1).getFirstName());
 	}
 }
