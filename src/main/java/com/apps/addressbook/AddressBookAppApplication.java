@@ -49,17 +49,19 @@ public class AddressBookAppApplication implements CommandLineRunner {
 		String email = scanner.nextLine();
 
 		Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone, email);
-
 		addressBook.addContact(contact);
-
 		addressBook.displayContacts();
 
 		System.out.println("\nEnter First Name of contact to edit:");
 		String editName = scanner.nextLine();
-
 		addressBook.editContact(editName);
-
 		System.out.println("\nUpdated Contacts:");
+		addressBook.displayContacts();
+
+		System.out.println("\nEnter first name of contact to delete:");
+		String nameToDelete = scanner.nextLine();
+		addressBook.deleteContact(nameToDelete);
+		System.out.println("\nUpdated Contact List:");
 		addressBook.displayContacts();
 	}
 }
