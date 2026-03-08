@@ -2,6 +2,7 @@ package com.apps.addressbook.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AddressBook {
 
@@ -31,4 +32,40 @@ public class AddressBook {
 		return contactList;
 	}
 
+	//method to edit contact 
+	public void editContact(String firstName) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        for (Contact contact : contactList) {
+
+            if (contact.getFirstName().equalsIgnoreCase(firstName)) {
+
+                System.out.println("Contact Found. Enter new details.");
+
+                System.out.println("Enter new Address:");
+                contact.setAddress(scanner.nextLine());
+
+                System.out.println("Enter new City:");
+                contact.setCity(scanner.nextLine());
+
+                System.out.println("Enter new State:");
+                contact.setState(scanner.nextLine());
+
+                System.out.println("Enter new Zip:");
+                contact.setZip(scanner.nextLine());
+
+                System.out.println("Enter new Phone:");
+                contact.setPhoneNumber(scanner.nextLine());
+
+                System.out.println("Enter new Email:");
+                contact.setEmail(scanner.nextLine());
+
+                System.out.println("Contact Updated Successfully");
+                return;
+            }
+        }
+
+        System.out.println("Contact not found");
+    }
 }
