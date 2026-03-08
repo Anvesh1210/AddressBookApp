@@ -10,15 +10,15 @@ import com.apps.addressbook.model.AddressBook;
 import com.apps.addressbook.model.Contact;
 
 @SpringBootApplication
-public class AddressBookAppApplication implements CommandLineRunner  {
+public class AddressBookAppApplication implements CommandLineRunner {
 
 	private AddressBook addressBook = new AddressBook();
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(AddressBookAppApplication.class, args);
 		System.out.println("Welcome to Address Book Application!!!");
 	}
-	
+
 	@Override
 	public void run(String... args) {
 
@@ -52,6 +52,14 @@ public class AddressBookAppApplication implements CommandLineRunner  {
 
 		addressBook.addContact(contact);
 
+		addressBook.displayContacts();
+
+		System.out.println("\nEnter First Name of contact to edit:");
+		String editName = scanner.nextLine();
+
+		addressBook.editContact(editName);
+
+		System.out.println("\nUpdated Contacts:");
 		addressBook.displayContacts();
 	}
 }
