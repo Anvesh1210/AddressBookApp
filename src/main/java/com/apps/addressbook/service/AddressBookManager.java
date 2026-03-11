@@ -1,9 +1,11 @@
 package com.apps.addressbook.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.apps.addressbook.model.AddressBook;
+import com.apps.addressbook.model.Contact;
 
 public class AddressBookManager {
 
@@ -38,5 +40,17 @@ public class AddressBookManager {
 
 	public Map<String, AddressBook> getAddressBookMap() {
 		return addressBookMap;
+	}
+
+	public List<Contact> searchPersonByCity(String city) {
+
+		return addressBookMap.values().stream().flatMap(addressBook -> addressBook.getContactList().stream())
+				.filter(contact -> contact.getCity().equalsIgnoreCase(city)).toList();
+	}
+
+	public List<Contact> searchPersonByState(String state) {
+
+		return addressBookMap.values().stream().flatMap(addressBook -> addressBook.getContactList().stream())
+				.filter(contact -> contact.getState().equalsIgnoreCase(state)).toList();
 	}
 }
