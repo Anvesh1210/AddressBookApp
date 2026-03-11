@@ -55,6 +55,14 @@ public class AddressBookController {
 		System.out.println("Last Name:");
 		String lastName = scanner.nextLine();
 
+		List<Contact> contacts = addressBook.getContactList();
+
+		boolean duplicate = contacts.stream().anyMatch(contact -> contact.getFirstName().equalsIgnoreCase(firstName)
+				&& contact.getLastName().equalsIgnoreCase(lastName));
+		if (duplicate) {
+			System.out.println("Duplicate contact found. Cannot add.");
+			return;
+		}
 		System.out.println("Address:");
 		String address = scanner.nextLine();
 
@@ -75,9 +83,9 @@ public class AddressBookController {
 
 		Contact contact = new Contact(firstName, lastName, address, city, state, zip, phone, email);
 
-		addressBook.getContactList().add(contact);
+		contacts.add(contact);
 
-		System.out.println("Contact added.");
+		System.out.println("Contact added successfully.");
 	}
 
 	private void editContact(AddressBook addressBook) {
