@@ -42,6 +42,13 @@ public class AddressBookController {
 			case 4:
 				addressBook.displayContacts();
 				break;
+			case 5:
+				searchByCity();
+				break;
+
+			case 6:
+				searchByState();
+				break;
 			}
 
 		} while (choice != 0);
@@ -137,5 +144,35 @@ public class AddressBookController {
 			}
 		}
 		System.out.println("Contact not found.");
+	}
+
+	private void searchByCity() {
+
+		System.out.println("Enter city:");
+		String city = scanner.nextLine();
+
+		List<Contact> results = manager.searchPersonByCity(city);
+
+		if (results.isEmpty()) {
+			System.out.println("No contacts found.");
+			return;
+		}
+
+		results.forEach(System.out::println);
+	}
+
+	private void searchByState() {
+
+		System.out.println("Enter state:");
+		String state = scanner.nextLine();
+
+		List<Contact> results = manager.searchPersonByState(state);
+
+		if (results.isEmpty()) {
+			System.out.println("No contacts found.");
+			return;
+		}
+
+		results.forEach(System.out::println);
 	}
 }
