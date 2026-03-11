@@ -3,6 +3,9 @@ package com.apps.addressbook;
 import com.apps.addressbook.model.AddressBook;
 import com.apps.addressbook.model.Contact;
 import com.apps.addressbook.service.AddressBookManager;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,5 +95,38 @@ public class AddressBookManagerTest {
 		book.getContactList().add(c1);
 		boolean exists = book.getContactList().stream().anyMatch(contact -> contact.equals(c2));
 		Assertions.assertTrue(exists);
+	}
+
+	@Test
+	void givenMultipleAddressBooks_whenSearchByCity_shouldReturnMatchingContacts() {
+		AddressBookManager manager = new AddressBookManager();
+		manager.createAddressBook("Family");
+		manager.createAddressBook("Friends");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"a@mail.com");
+		Contact c2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Kanpur", "UP", "226016", "9999999999",
+				"b@mail.com");
+		manager.getAddressBook("Family").getContactList().add(c1);
+		manager.getAddressBook("Friends").getContactList().add(c2);
+		List<Contact> results = manager.searchPersonByCity("Kanpur");
+		Assertions.assertEquals(2, results.size());
+	}
+
+	@Test
+	void givenContacts_whenSearchByState_shouldReturnCorrectContacts() {
+		AddressBookManager manager = new AddressBookManager();
+		manager.createAddressBook("Office");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"a@mail.com");
+		manager.getAddressBook("Office").getContactList().add(c1);
+		List<Contact> results = manager.searchPersonByState("UP");
+		Assertions.assertEquals(1, results.size());
+	}
+
+	@Test
+	void givenNoMatchingCity_whenSearch_shouldReturnEmptyList() {
+		AddressBookManager manager = new AddressBookManager();
+		List<Contact> results = manager.searchPersonByCity("Delhi");
+		Assertions.assertTrue(results.isEmpty());
 	}
 }
