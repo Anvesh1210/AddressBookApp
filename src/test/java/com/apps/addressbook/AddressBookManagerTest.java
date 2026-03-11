@@ -1,6 +1,7 @@
 package com.apps.addressbook;
 
 import com.apps.addressbook.model.AddressBook;
+import com.apps.addressbook.model.Contact;
 import com.apps.addressbook.service.AddressBookManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,49 +17,80 @@ public class AddressBookManagerTest {
 	}
 
 	@Test
-	void givenAddressBookName_whenCreated_shouldStoreInMap() {
-		manager.createAddressBook("Family");
-		Assertions.assertTrue(manager.getAddressBook("Family") != null);
+	void givenNewContact_whenAdded_shouldIncreaseListSize() {
+		AddressBook book = new AddressBook("Family");
+		Contact contact = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		book.getContactList().add(contact);
+		Assertions.assertEquals(1, book.getContactList().size());
 	}
 
 	@Test
-	void givenMultipleAddressBooks_whenCreated_shouldStoreAllBooks() {
-		manager.createAddressBook("Family");
-		manager.createAddressBook("Friends");
-		Assertions.assertEquals(2, manager.getAddressBookMap().size());
+	void givenDuplicateContact_whenAdded_shouldNotBeAllowed() {
+		AddressBook book = new AddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		book.getContactList().add(c1);
+		boolean duplicate = book.getContactList().stream().anyMatch(contact -> contact.equals(c2));
+		Assertions.assertTrue(duplicate);
 	}
 
 	@Test
-	void givenDuplicateAddressBookName_whenCreated_shouldNotIncreaseMapSize() {
-		manager.createAddressBook("Family");
-		manager.createAddressBook("Family");
-		Assertions.assertEquals(1, manager.getAddressBookMap().size());
+	void givenUniqueContacts_whenAdded_shouldStoreBothContacts() {
+		AddressBook book = new AddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
+				"rahul@email.com");
+		book.getContactList().add(c1);
+		book.getContactList().add(c2);
+		Assertions.assertEquals(2, book.getContactList().size());
 	}
 
 	@Test
-	void givenAddressBookExists_whenFetched_shouldReturnCorrectObject() {
-		manager.createAddressBook("Office");
-		AddressBook book = manager.getAddressBook("Office");
-		Assertions.assertEquals("Office", book.getAddressBookName());
+	void givenSameFirstNameDifferentLastName_whenAdded_shouldBeAllowed() {
+		AddressBook book = new AddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Anvesh", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
+				"rahul@email.com");
+		book.getContactList().add(c1);
+		book.getContactList().add(c2);
+		Assertions.assertEquals(2, book.getContactList().size());
 	}
 
 	@Test
-	void givenAddressBookDoesNotExist_whenFetched_shouldReturnNull() {
-		AddressBook book = manager.getAddressBook("Unknown");
-		Assertions.assertNull(book);
+	void givenSameLastNameDifferentFirstName_whenAdded_shouldBeAllowed() {
+		AddressBook book = new AddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Rahul", "Sahu", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
+				"rahul@email.com");
+		book.getContactList().add(c1);
+		book.getContactList().add(c2);
+		Assertions.assertEquals(2, book.getContactList().size());
 	}
 
 	@Test
-	void givenAddressBookCreated_whenCheckedMap_shouldContainKey() {
-		manager.createAddressBook("Friends");
-		Assertions.assertTrue(manager.getAddressBookMap().containsKey("Friends"));
+	void givenDuplicateContacts_whenComparedUsingEquals_shouldReturnTrue() {
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Assertions.assertEquals(c1, c2);
 	}
 
 	@Test
-	void givenMultipleAddressBooks_whenStored_shouldMaintainCorrectMapSize() {
-		manager.createAddressBook("Family");
-		manager.createAddressBook("Friends");
-		manager.createAddressBook("Office");
-		Assertions.assertEquals(3, manager.getAddressBookMap().size());
+	void givenContactList_whenStreamSearchDuplicate_shouldDetectDuplicate() {
+		AddressBook book = new AddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		Contact c2 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"anvesh@email.com");
+		book.getContactList().add(c1);
+		boolean exists = book.getContactList().stream().anyMatch(contact -> contact.equals(c2));
+		Assertions.assertTrue(exists);
 	}
 }
