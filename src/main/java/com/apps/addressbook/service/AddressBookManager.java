@@ -13,76 +13,76 @@ public class AddressBookManager {
 	private Map<String, AddressBook> addressBookMap = new HashMap<>();
 
 	public void createAddressBook(String name) {
-
 		if (addressBookMap.containsKey(name)) {
-
 			System.out.println("AddressBook already exists.");
-
 			return;
 		}
 
 		addressBookMap.put(name, new AddressBook(name));
-
 		System.out.println("AddressBook '" + name + "' created.");
 	}
 
 	public AddressBook getAddressBook(String name) {
-
 		return addressBookMap.get(name);
 	}
 
 	public Map<String, AddressBook> getAddressBookMap() {
-
 		return addressBookMap;
 	}
 
 	public List<Contact> searchPersonByCity(String city) {
-
 		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
 				.filter(contact -> contact.getCity().equalsIgnoreCase(city)).collect(Collectors.toList());
 	}
 
 	public List<Contact> searchPersonByState(String state) {
-
 		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
 				.filter(contact -> contact.getState().equalsIgnoreCase(state)).collect(Collectors.toList());
 	}
 
-	// UC9
-
 	public Map<String, List<Contact>> getPersonsByCity() {
-
 		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
 				.collect(Collectors.groupingBy(Contact::getCity));
 	}
 
 	public Map<String, List<Contact>> getPersonsByState() {
-
 		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
 				.collect(Collectors.groupingBy(Contact::getState));
 	}
 
 	public void displayPersonsByCity() {
-
 		Map<String, List<Contact>> personsByCity = getPersonsByCity();
-
 		personsByCity.forEach((city, contacts) -> {
-
 			System.out.println("\nCity: " + city);
-
 			contacts.forEach(System.out::println);
 		});
 	}
 
 	public void displayPersonsByState() {
-
 		Map<String, List<Contact>> personsByState = getPersonsByState();
-
 		personsByState.forEach((state, contacts) -> {
-
 			System.out.println("\nState: " + state);
-
 			contacts.forEach(System.out::println);
 		});
+	}
+
+	public Map<String, Long> countContactsByCity() {
+		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
+				.collect(Collectors.groupingBy(Contact::getCity, Collectors.counting()));
+	}
+
+	public Map<String, Long> countContactsByState() {
+		return addressBookMap.values().stream().flatMap(book -> book.getContactList().stream())
+				.collect(Collectors.groupingBy(Contact::getState, Collectors.counting()));
+	}
+
+	public void displayContactCountByCity() {
+		Map<String, Long> result = countContactsByCity();
+		result.forEach((city, count) -> System.out.println(city + " : " + count));
+	}
+
+	public void displayContactCountByState() {
+		Map<String, Long> result = countContactsByState();
+		result.forEach((state, count) -> System.out.println(state + " : " + count));
 	}
 }
