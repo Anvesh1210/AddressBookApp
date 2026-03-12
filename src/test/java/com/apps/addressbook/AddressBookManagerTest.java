@@ -5,6 +5,7 @@ import com.apps.addressbook.model.Contact;
 import com.apps.addressbook.service.AddressBookManager;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -128,5 +129,58 @@ public class AddressBookManagerTest {
 		AddressBookManager manager = new AddressBookManager();
 		List<Contact> results = manager.searchPersonByCity("Delhi");
 		Assertions.assertTrue(results.isEmpty());
+	}
+
+	@Test
+	void givenMultipleContacts_whenGroupedByCity_shouldReturnCorrectMap() {
+		manager.createAddressBook("Family");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"a@mail.com");
+		Contact c2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Kanpur", "UP", "226016", "9999999999",
+				"b@mail.com");
+		Contact c3 = new Contact("Aman", "Verma", "Sector 10", "Delhi", "DL", "110001", "8888888888", "c@mail.com");
+		manager.getAddressBook("Family").getContactList().add(c1);
+		manager.getAddressBook("Family").getContactList().add(c2);
+		manager.getAddressBook("Family").getContactList().add(c3);
+		Map<String, List<Contact>> result = manager.getPersonsByCity();
+		Assertions.assertEquals(2, result.get("Kanpur").size());
+		Assertions.assertEquals(1, result.get("Delhi").size());
+	}
+
+	@Test
+	void givenMultipleContacts_whenGroupedByState_shouldReturnCorrectMap() {
+		manager.createAddressBook("Office");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"a@mail.com");
+		Contact c2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Lucknow", "UP", "226016", "9999999999",
+				"b@mail.com");
+		Contact c3 = new Contact("Aman", "Verma", "Sector 10", "Delhi", "DL", "110001", "8888888888", "c@mail.com");
+		manager.getAddressBook("Office").getContactList().add(c1);
+		manager.getAddressBook("Office").getContactList().add(c2);
+		manager.getAddressBook("Office").getContactList().add(c3);
+		Map<String, List<Contact>> result = manager.getPersonsByState();
+		Assertions.assertEquals(2, result.get("UP").size());
+		Assertions.assertEquals(1, result.get("DL").size());
+	}
+
+	@Test
+	void givenMultipleAddressBooks_whenGroupedByCity_shouldIncludeAllContacts() {
+		manager.createAddressBook("Family");
+		manager.createAddressBook("Friends");
+		Contact c1 = new Contact("Anvesh", "Sahu", "Govind Nagar", "Kanpur", "UP", "208006", "9876543210",
+				"a@mail.com");
+		Contact c2 = new Contact("Rahul", "Sharma", "Indira Nagar", "Kanpur", "UP", "226016", "9999999999",
+				"b@mail.com");
+		manager.getAddressBook("Family").getContactList().add(c1);
+		manager.getAddressBook("Friends").getContactList().add(c2);
+		Map<String, List<Contact>> result = manager.getPersonsByCity();
+		Assertions.assertEquals(2, result.get("Kanpur").size());
+	}
+
+	@Test
+	void givenEmptyAddressBook_whenGroupedByCity_shouldReturnEmptyMap() {
+		manager.createAddressBook("Empty");
+		Map<String, List<Contact>> result = manager.getPersonsByCity();
+		Assertions.assertTrue(result.isEmpty());
 	}
 }
